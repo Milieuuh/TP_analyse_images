@@ -8,20 +8,33 @@ public class Image {
     private String lien;
     private BufferedImage img;
 
-    public Image(String lien)throws IOException
+    public Image(String lien) throws IOException
     {
         this.lien = lien;
         img = ImageIO.read(new File(this.lien));
     }
 
-    private Image binarisation()
-    {
-        return null;
-    }
 
     public Image seuillage(int seuil)
     {
-        return null;
+        Image imageSeuil = this;
+
+        for (int i=0; i<this.img.getWidth(); i++)
+        {
+            for (int j=0; j<this.img.getHeight(); j++)
+            {
+                    if(this.img.getRGB(i,j)<seuil)
+                    {
+                        imageSeuil.img.setRGB(i, j, 0);
+                    }
+                    else
+                    {
+                        imageSeuil.img.setRGB(i, j, 255);
+                    }
+            }
+        }
+
+        return imageSeuil;
     }
 
     public Image addition(Image img)
