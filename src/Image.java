@@ -49,22 +49,78 @@ public class Image {
 
     public Image erosion()
     {
-        return null;
+        Image erodee = this;
+        Image binaire = this.seuillage(120);
+        for (int i=1; i<=binaire.img.getWidth()-2; i++)
+        {
+            for (int j=1; j<=binaire.img.getHeight()-2; j++)
+            {
+                int somme = 0;
+                for(int k=-1; k<=1; k++)
+                {
+                    for(int l=-1; l<=1; l++)
+                    {
+                        somme += binaire.img.getRGB(i+k, j-l);
+                    }
+                }
+
+                if(somme == 2295)
+                {
+                    erodee.img.setRGB(i, j, 255);
+                }
+                else
+                {
+                    erodee.img.setRGB(i, j, 0);
+                }
+            }
+        }
+
+        return erodee;
     }
 
     public Image dilatation()
     {
-        return null;
+        Image dilatee = this;
+        Image binaire = this.seuillage(120);
+        for (int i=1; i<=binaire.img.getWidth()-2; i++)
+        {
+            for (int j=1; j<=binaire.img.getHeight()-2; j++)
+            {
+                int somme = 0;
+                for(int k=-1; k<=1; k++)
+                {
+                    for(int l=-1; l<=1; l++)
+                    {
+                        somme += binaire.img.getRGB(i+k, j-l);
+                    }
+                }
+
+                if(somme == 0)
+                {
+                    dilatee.img.setRGB(i, j, 0);
+                }
+                else
+                {
+                    dilatee.img.setRGB(i, j, 255);
+                }
+            }
+        }
+
+        return dilatee;
     }
 
     public Image ouverture()
     {
-        return null;
+        Image erodee = this.erosion();
+        Image result = erodee.dilatation();
+        return result;
     }
 
     public Image fermeture()
     {
-        return null;
+        Image dilatee = this.dilatation();
+        Image result = dilatee.erosion();
+        return result;
     }
 
     public Image amincissement()
