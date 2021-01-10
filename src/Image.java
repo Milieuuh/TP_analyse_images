@@ -1,10 +1,17 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class Image {
 
     private String lien;
+    private BufferedImage img;
 
-    public Image(String lien)
+    public Image(String lien)throws IOException
     {
         this.lien = lien;
+        img = ImageIO.read(new File(this.lien));
     }
 
     private Image binarisation()
