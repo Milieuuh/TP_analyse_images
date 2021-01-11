@@ -5,21 +5,25 @@ import java.io.IOException;
 
 //http://remy-manu.no-ip.biz/Java/Tutoriels/AWT/TraitementImages.html
 
-public class Image {
+public class MonImage {
 
     private String lien;
     private BufferedImage img;
 
-    public Image(String lien) throws IOException
+    public MonImage()
+    {
+
+    }
+    public MonImage(String lien) throws IOException
     {
         this.lien = lien;
         img = ImageIO.read(new File(this.lien));
     }
 
 
-    public Image seuillage(int seuil)
+    public MonImage seuillage(int seuil)
     {
-        Image imageSeuil = this;
+        MonImage monImageSeuil = this;
 
         for (int i=0; i<this.img.getWidth(); i++)
         {
@@ -27,29 +31,37 @@ public class Image {
             {
                     if(this.img.getRGB(i,j)<seuil)
                     {
-                        imageSeuil.img.setRGB(i, j, 0);
+                        monImageSeuil.img.setRGB(i, j, 0);
                     }
                     else
                     {
-                        imageSeuil.img.setRGB(i, j, 255);
+                        monImageSeuil.img.setRGB(i, j, 255);
                     }
             }
         }
+        for(int i=0; i< img.getWidth(); i++)
+        {
+            for(int j=0; j< img.getHeight(); j++)
+            {
+                System.out.println(img.getRGB(i, j)+" - ");
+            }
+            System.out.println();
+        }
 
-        return imageSeuil;
+        return monImageSeuil;
     }
 
-    public Image addition(Image img)
+    public MonImage addition(MonImage img)
     {
 
-        Image imageBase = this;
-        Image res = this;
+        MonImage monImageBase = this;
+        MonImage res = this;
 
-        for(int i=0;i<imageBase.img.getWidth();i++)
+        for(int i = 0; i< monImageBase.img.getWidth(); i++)
         {
-            for(int j=0;j<imageBase.img.getHeight();j++)
+            for(int j = 0; j< monImageBase.img.getHeight(); j++)
             {
-                int color = imageBase.img.getRGB(i,j)+img.img.getRGB(i,j);
+                int color = monImageBase.img.getRGB(i,j)+img.img.getRGB(i,j);
 
                 if(color>255)
                 {
@@ -62,17 +74,17 @@ public class Image {
         return res;
     }
 
-    public Image soustraction(Image img)
+    public MonImage soustraction(MonImage img)
     {
 
-        Image imageBase = this;
-        Image res = this;
+        MonImage monImageBase = this;
+        MonImage res = this;
 
-        for(int i=0;i<imageBase.img.getWidth();i++)
+        for(int i = 0; i< monImageBase.img.getWidth(); i++)
         {
-            for(int j=0;j<imageBase.img.getHeight();j++)
+            for(int j = 0; j< monImageBase.img.getHeight(); j++)
             {
-                int color = imageBase.img.getRGB(i,j)-img.img.getRGB(i,j);
+                int color = monImageBase.img.getRGB(i,j)-img.img.getRGB(i,j);
 
                 if(color<0)
                 {
@@ -85,10 +97,10 @@ public class Image {
         return res;
     }
 
-    public Image erosion()
+    public MonImage erosion()
     {
-        Image erodee = this;
-        Image binaire = this.seuillage(120);
+        MonImage erodee = this;
+        MonImage binaire = this.seuillage(120);
         for (int i=1; i<=binaire.img.getWidth()-2; i++)
         {
             for (int j=1; j<=binaire.img.getHeight()-2; j++)
@@ -116,10 +128,10 @@ public class Image {
         return erodee;
     }
 
-    public Image dilatation()
+    public MonImage dilatation()
     {
-        Image dilatee = this;
-        Image binaire = this.seuillage(120);
+        MonImage dilatee = this;
+        MonImage binaire = this.seuillage(120);
         for (int i=1; i<=binaire.img.getWidth()-2; i++)
         {
             for (int j=1; j<=binaire.img.getHeight()-2; j++)
@@ -147,36 +159,44 @@ public class Image {
         return dilatee;
     }
 
-    public Image ouverture()
+    public MonImage ouverture()
     {
-        Image erodee = this.erosion();
-        Image result = erodee.dilatation();
+        MonImage erodee = this.erosion();
+        MonImage result = erodee.dilatation();
         return result;
     }
 
-    public Image fermeture()
+    public MonImage fermeture()
     {
-        Image dilatee = this.dilatation();
-        Image result = dilatee.erosion();
+        MonImage dilatee = this.dilatation();
+        MonImage result = dilatee.erosion();
         return result;
     }
 
     //ajouter un paramètre L
-    public Image transformationDeVoisinage()
+    public MonImage transformationDeVoisinage()
     {
         return null;
     }
 
-    public Image amincissement()
+    public MonImage amincissement()
     {
         return null;
     }
 
-    public Image epaississement()
+    public MonImage epaississement()
     {
         return null;
     }
 
+
+
+    public BufferedImage getImg() {
+        return img;
+    }
+    public void setImg(BufferedImage img) {
+        this.img = img;
+    }
 
 
 }

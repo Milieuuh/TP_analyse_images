@@ -1,3 +1,4 @@
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -17,10 +18,12 @@ import java.net.URL;
 
 public class fenetre extends Parent {
 
-   // BufferedImage image;
+   private MonImage image = new MonImage();
+   private Image imageFx ;
 
     public fenetre(Stage primaryStage)
     {
+
         //Demande du seuil
         Label l_seuil = new Label("Seuil : ");
 
@@ -57,23 +60,25 @@ public class fenetre extends Parent {
         Button bt_fermeture = new Button("FERMETURE");
 
         //POSITION
+        bt_seuillage.setLayoutX(25);
+        bt_seuillage.setLayoutY(190);
+        bt_seuillage.setPrefSize(200,30);
+
         bt_erosion.setLayoutX(25);
-        bt_erosion.setLayoutY(190);
+        bt_erosion.setLayoutY(250);
         bt_erosion.setPrefSize(200,30);
 
         bt_dilatation.setLayoutX(25);
-        bt_dilatation.setLayoutY(250);
+        bt_dilatation.setLayoutY(320);
         bt_dilatation.setPrefSize(200,30);
 
         bt_ouverture.setLayoutX(25);
-        bt_ouverture.setLayoutY(320);
+        bt_ouverture.setLayoutY(390);
         bt_ouverture.setPrefSize(200,30);
 
         bt_fermeture.setLayoutX(25);
-        bt_fermeture.setLayoutY(390);
+        bt_fermeture.setLayoutY(460);
         bt_fermeture.setPrefSize(200,30);
-
-
         //IMAGE
         Rectangle rect_image = new Rectangle() ;
 
@@ -89,7 +94,6 @@ public class fenetre extends Parent {
         btn_ouvrir_image.setLayoutX(405);
         btn_ouvrir_image.setLayoutY(375);
         btn_ouvrir_image.setPrefSize(200,30);
-
         btn_ouvrir_image.setOnAction(actionEvent -> {
             final FileChooser dialog = new FileChooser();
             final File file = dialog.showOpenDialog(btn_ouvrir_image.getScene().getWindow());
@@ -97,8 +101,8 @@ public class fenetre extends Parent {
                 URL url =  getClass().getResource(file.getPath());
                 System.out.println("URL : "+ file.getPath());
 
-                Image img = new Image(getClass().getResource("/images/"+file.getName()).toExternalForm());
-                ImageView imageView = new ImageView(img);
+                imageFx = new Image(getClass().getResource("/images/"+file.getName()).toExternalForm());
+                ImageView imageView = new ImageView(imageFx);
 
                 imageView.setFitWidth(300);
                 imageView.setLayoutX(350);
@@ -131,9 +135,6 @@ public class fenetre extends Parent {
             final FileChooser dialog = new FileChooser();
             final File file = dialog.showOpenDialog(btn_ouvrir_image2.getScene().getWindow());
             if (file != null) {
-                URL url =  getClass().getResource(file.getPath());
-                System.out.println("URL : "+ file.getPath());
-
                 Image img = new Image(getClass().getResource("/images/"+file.getName()).toExternalForm());
                 ImageView imageView = new ImageView(img);
 
@@ -164,6 +165,54 @@ public class fenetre extends Parent {
         bt_seuillage.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
+                BufferedImage im =  SwingFXUtils.fromFXImage(imageFx, null);
+                image.setImg(im);
+
+                int seuil = (int) slider.getValue();
+                image = image.seuillage(seuil);
+
+                imageFx = SwingFXUtils.toFXImage(image.getImg(), null);
+
+                ImageView imageView = new ImageView(imageFx);
+
+                System.out.println("COUSCOUS "+ imageFx);;
+                System.out.println("COUSCOUS "+ imageView);;
+
+
+                imageView.setFitWidth(450);
+                imageView.setLayoutX(450);
+                imageView.setLayoutY(450);
+                imageView.setPreserveRatio(true);
+
+                getChildren().add(imageView);
+
+
+            }
+        });
+
+        //APPUIE SUR BOUTON
+        bt_erosion.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                BufferedImage im =  SwingFXUtils.fromFXImage(imageFx, null);
+                image.setImg(im);
+
+                int seuil = (int) slider.getValue();
+                image = image.erosion();
+
+                imageFx = SwingFXUtils.toFXImage(image.getImg(), null);
+
+                ImageView imageView = new ImageView(imageFx);
+
+                System.out.println("COUSCOUS "+ imageFx);;
+                System.out.println("COUSCOUS "+ imageView);;
+
+                imageView.setFitWidth(450);
+                imageView.setLayoutX(450);
+                imageView.setLayoutY(450);
+                imageView.setPreserveRatio(true);
+
+                getChildren().add(imageView);
 
 
             }
@@ -175,6 +224,7 @@ public class fenetre extends Parent {
         this.getChildren().add(l_seuil);
         //this.getChildren().add(l_nbSeuil);
         this.getChildren().add(bt_erosion);
+        this.getChildren().add(bt_seuillage);
         this.getChildren().add(bt_dilatation);
         this.getChildren().add(bt_ouverture);
         this.getChildren().add(bt_fermeture);
