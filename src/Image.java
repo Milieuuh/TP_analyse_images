@@ -39,12 +39,48 @@ public class Image {
 
     public Image addition(Image img)
     {
-        return null;
+
+        Image imageBase = this;
+        Image res = this;
+
+        for(int i=0;i<imageBase.img.getWidth();i++)
+        {
+            for(int j=0;j<imageBase.img.getHeight();j++)
+            {
+                int color = imageBase.img.getRGB(i,j)+img.img.getRGB(i,j);
+
+                if(color>255)
+                {
+                    color=255;
+                }
+
+                res.img.setRGB(i,j,color);
+            }
+        }
+        return res;
     }
 
     public Image soustraction(Image img)
     {
-        return null;
+
+        Image imageBase = this;
+        Image res = this;
+
+        for(int i=0;i<imageBase.img.getWidth();i++)
+        {
+            for(int j=0;j<imageBase.img.getHeight();j++)
+            {
+                int color = imageBase.img.getRGB(i,j)-img.img.getRGB(i,j);
+
+                if(color<0)
+                {
+                    color=0;
+                }
+
+                res.img.setRGB(i,j,color);
+            }
+        }
+        return res;
     }
 
     public Image erosion()
