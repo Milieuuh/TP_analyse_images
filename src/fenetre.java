@@ -77,17 +77,17 @@ public class fenetre extends Parent {
         //IMAGE
         Rectangle rect_image = new Rectangle() ;
 
-        rect_image.setHeight(512);
-        rect_image.setWidth(512);
+        rect_image.setHeight(300);
+        rect_image.setWidth(300);
         rect_image.setX(350);
-        rect_image.setY(175);
+        rect_image.setY(50);
 
         rect_image.setFill(Color.TRANSPARENT);
         rect_image.setStroke(Color.BLACK);
 
         final Button btn_ouvrir_image = new Button("Ouvrir une image");
-        btn_ouvrir_image.setLayoutX(550);
-        btn_ouvrir_image.setLayoutY(700);
+        btn_ouvrir_image.setLayoutX(405);
+        btn_ouvrir_image.setLayoutY(375);
         btn_ouvrir_image.setPrefSize(200,30);
 
         btn_ouvrir_image.setOnAction(actionEvent -> {
@@ -100,15 +100,64 @@ public class fenetre extends Parent {
                 Image img = new Image(getClass().getResource("/images/"+file.getName()).toExternalForm());
                 ImageView imageView = new ImageView(img);
 
-                imageView.setFitWidth(512);
+                imageView.setFitWidth(300);
                 imageView.setLayoutX(350);
-                imageView.setLayoutY(175);
+                imageView.setLayoutY(50);
                 imageView.setPreserveRatio(true);
 
                 this.getChildren().add(imageView);
 
             }
         });
+
+
+        //IMAGE
+        Rectangle rect_image2 = new Rectangle() ;
+
+        rect_image2.setHeight(300);
+        rect_image2.setWidth(300);
+        rect_image2.setX(750);
+        rect_image2.setY(50);
+
+        rect_image2.setFill(Color.TRANSPARENT);
+        rect_image2.setStroke(Color.BLACK);
+
+        final Button btn_ouvrir_image2 = new Button("Ouvrir une image");
+        btn_ouvrir_image2.setLayoutX(800);
+        btn_ouvrir_image2.setLayoutY(375);
+        btn_ouvrir_image2.setPrefSize(200,30);
+
+        btn_ouvrir_image2.setOnAction(actionEvent -> {
+            final FileChooser dialog = new FileChooser();
+            final File file = dialog.showOpenDialog(btn_ouvrir_image2.getScene().getWindow());
+            if (file != null) {
+                URL url =  getClass().getResource(file.getPath());
+                System.out.println("URL : "+ file.getPath());
+
+                Image img = new Image(getClass().getResource("/images/"+file.getName()).toExternalForm());
+                ImageView imageView = new ImageView(img);
+
+                imageView.setFitWidth(300);
+                imageView.setLayoutX(750);
+                imageView.setLayoutY(50);
+                imageView.setPreserveRatio(true);
+
+                this.getChildren().add(imageView);
+
+            }
+        });
+
+        ///////////////////RECTANGLE RESULT
+
+        Rectangle rect_result = new Rectangle() ;
+
+        rect_result.setHeight(450);
+        rect_result.setWidth(450);
+        rect_result.setX(450);
+        rect_result.setY(450);
+
+        rect_result.setFill(Color.TRANSPARENT);
+        rect_result.setStroke(Color.BLACK);
 
 
         //APPUIE SUR BOUTON
@@ -131,6 +180,9 @@ public class fenetre extends Parent {
         this.getChildren().add(bt_fermeture);
         this.getChildren().add(rect_image);
         this.getChildren().add(btn_ouvrir_image);
+        this.getChildren().add(rect_image2);
+        this.getChildren().add(btn_ouvrir_image2);
+        this.getChildren().add(rect_result);
 
     }
 

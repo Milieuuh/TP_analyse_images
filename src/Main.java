@@ -8,7 +8,7 @@ public class Main extends Application {
         @Override
         public void start(Stage primaryStage) throws Exception{
             Group root = new Group() ;
-            primaryStage.setScene(new Scene(root, 1000, 800));
+            primaryStage.setScene(new Scene(root, 1200, 950));
             fenetre f = new fenetre(primaryStage);
             root.getChildren().add(f) ;
             primaryStage.show();
