@@ -79,7 +79,7 @@ public class fenetre extends Parent {
 
         rect_image.setHeight(512);
         rect_image.setWidth(512);
-        rect_image.setX(400);
+        rect_image.setX(350);
         rect_image.setY(175);
 
         rect_image.setFill(Color.TRANSPARENT);
@@ -87,7 +87,7 @@ public class fenetre extends Parent {
 
         final Button btn_ouvrir_image = new Button("Ouvrir une image");
         btn_ouvrir_image.setLayoutX(550);
-        btn_ouvrir_image.setLayoutY(425);
+        btn_ouvrir_image.setLayoutY(700);
         btn_ouvrir_image.setPrefSize(200,30);
 
         btn_ouvrir_image.setOnAction(actionEvent -> {
@@ -100,10 +100,11 @@ public class fenetre extends Parent {
                 Image img = new Image(getClass().getResource("/images/"+file.getName()).toExternalForm());
                 ImageView imageView = new ImageView(img);
 
-                imageView.setFitWidth(300);
+                imageView.setFitWidth(512);
+                imageView.setLayoutX(350);
+                imageView.setLayoutY(175);
                 imageView.setPreserveRatio(true);
 
-                imageView.setLayoutX(10);
                 this.getChildren().add(imageView);
 
             }

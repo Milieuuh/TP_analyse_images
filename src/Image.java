@@ -3,6 +3,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+//http://remy-manu.no-ip.biz/Java/Tutoriels/AWT/TraitementImages.html
+
 public class Image {
 
     private String lien;
@@ -157,6 +159,12 @@ public class Image {
         Image dilatee = this.dilatation();
         Image result = dilatee.erosion();
         return result;
+    }
+
+    //ajouter un paramètre L
+    public Image transformationDeVoisinage()
+    {
+        return null;
     }
 
     public Image amincissement()
