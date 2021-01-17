@@ -122,6 +122,9 @@ def soustraction(lablResult, path1, path2):
 
 def amincissement(lablResult, path1):
     elementStructurant = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
+    #elementStructurant = np.array([[0, 0, 0], [0, 1, 0], [0, 2, 2]])
+    #elementStructurant = np.array([[0, 0, 0], [2, 1, 2], [1, 1, 1]])
+
     img = cv.imread(path1)
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgSeuil = main.seuillage(120, imgGray)
@@ -135,6 +138,9 @@ def amincissement(lablResult, path1):
 
 def epaississement(lablResult, path1):
     elementStructurant = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
+    #elementStructurant = np.array([[0, 0, 0], [0, 1, 0], [0, 2, 2]])
+    #elementStructurant = np.array([[0, 0, 0], [2, 1, 2], [1, 1, 1]])
+
     img = cv.imread(path1)
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgSeuil = main.seuillage(120, imgGray)
@@ -147,7 +153,9 @@ def epaississement(lablResult, path1):
     lablResult.place(x=0, y=0)
 
 def squelettisation(lablResult, path1, nb):
-    elementStructurant = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
+    #elementStructurant = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
+    #elementStructurant = np.array([[0, 0, 0], [2, 1, 2], [1, 1, 1]])
+    elementStructurant = np.array([[2, 0, 0], [1, 1, 0], [2, 1, 2]])
     img = cv.imread(path1)
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgSeuil = main.seuillage(120, imgGray)
@@ -170,6 +178,7 @@ def nbIteration(lablResult, path1):
 
 def squelettisation2(lablResult, path1):
     elementStructurant = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
+    elementStructurant = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
     img = cv.imread(path1)
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgSeuil = main.seuillage(120, imgGray)

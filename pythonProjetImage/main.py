@@ -125,6 +125,7 @@ def squeletisationLantuejoul(img,elementStructurant2,nbIteration):
     return imgAdd
 
 def amincissement(img, elementStructurant):
+    #print("ammincissement")
     imgAmincie = img.copy()
 
     # largeur et longueur de l'élément structurant
@@ -163,13 +164,13 @@ def epaississement(img, elementStructurant):
                     var = elementStructurant[k+1, l+ 1]
                     if(var ==1):
                         var =255
-                    print(var)
+
                     if img[i+k,j+l]==var and elementStructurant[k+1 ,l+1]!=2:
                        bool = False
             if bool == False:
-                imgEpaississement[i,j]=0
-            else:
                 imgEpaississement[i,j]=255
+            else:
+                imgEpaississement[i,j]=0
 
     return imgEpaississement
 
@@ -183,16 +184,19 @@ def differenceImage(img1, img2):
 
 
 def squelettisationParAmincissement(img, elementStructurant):
+    print("Squeletisation par amincissement")
     imgSquelette = img.copy()
     nb=0
     while True:
+
         imgAvant = imgSquelette
         if nb==0:
             imgSquelette = amincissement(img, elementStructurant)
         else:
             imgSquelette = amincissement(imgSquelette, elementStructurant)
+        print(nb)
         nb=nb+1
-        if differenceImage(imgSquelette, imgAvant):
+        if nb==10:#differenceImage(imgSquelette, imgAvant): #nb==30:
             break
 
     return imgSquelette
@@ -202,16 +206,16 @@ def squelettisationParAmincissement(img, elementStructurant):
 # img = cv.imread('fruits.jpg')
 # img2 = cv.imread('fruits2.jpg')
 img = cv.imread('croix_61.png')
-img2 = cv.imread('croix2.png')
+img2 = cv.imread('croix.png')
 #img = cv.imread('Rect.png')
-imgGray= cv.cvtColor(img,cv.COLOR_BGR2GRAY)
+imgGray= cv.cvtColor(img2,cv.COLOR_BGR2GRAY)
 #imgGray2= cv.cvtColor(img2,cv.COLOR_BGR2GRAY)
 
 elementStructurantAE = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
 elementStructurant = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 
 
-imgSeuil = seuillage(120, imgGray)
+#imgSeuil = seuillage(120, imgGray)
 
 #imgErodee = erosion(imgSeuil, elementStructurant)
 #
@@ -228,11 +232,13 @@ imgSeuil = seuillage(120, imgGray)
 #imgL = squeletisationLantuejoul(imgSeuil,elementStructurant,10)
 #imgL = epaississement(imgSeuil,elementStructurantAE)
 #imgL = amincissement(imgSeuil,elementStructurantAE)
-imgL = squelettisationParAmincissement(imgSeuil, elementStructurantAE)
+#imgL = squelettisationParAmincissement(imgSeuil, elementStructurantAE)
+
+
 #
-plt.subplot(1, 2, 1)
-plt.title("Image d'origine")
-plt.imshow(imgSeuil, cmap='gray')
+# plt.subplot(1, 2, 1)
+# plt.title("Image d'origine")
+# plt.imshow(imgSeuil, cmap='gray')
 #
 # plt.subplot(3, 3, 2)
 # plt.title("Image seuillage")
@@ -262,9 +268,9 @@ plt.imshow(imgSeuil, cmap='gray')
 # plt.title("Image soustraction")
 # plt.imshow(imgSous,cmap='gray')
 
-plt.subplot(1, 2, 2)
-plt.title("Image Lantuejoul")
-plt.imshow(imgL, cmap='gray')
+# plt.subplot(1, 2, 2)
+# plt.title("Image Lantuejoul")
+# plt.imshow(imgL, cmap='gray')
 
 plt.show()
 
