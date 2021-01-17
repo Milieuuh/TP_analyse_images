@@ -114,14 +114,25 @@ def fermeture(img, elementStructurant):
 def squeletisationLantuejoul(img,elementStructurant2,nbIteration):
     print("Lantuejoul")
     imgAdd=img.copy()
+
     for nb in range(0,nbIteration):
-        imgErode=erosion(img, nb*elementStructurant2)
+        imgErode = img.copy()
+        for x in range(0, nb):
+            imgErode=erosion(imgErode, elementStructurant2)
+
         imgOuvertureErode=ouverture(imgErode, elementStructurant2)
         imgSous=soustraction(imgErode, imgOuvertureErode)
+
         if nb>0:
             imgAdd=addition(imgAdd, imgSous)
         else:
             imgAdd=imgSous
+
+        # cv.namedWindow('img', cv.WINDOW_NORMAL)
+        # cv.imshow('img', imgAdd)
+        # cv.waitKey(0)
+        # cv.destroyAllWindows()
+
     return imgAdd
 
 def amincissement(img, elementStructurant):
@@ -205,8 +216,8 @@ def squelettisationParAmincissement(img, elementStructurant):
 ######################MAIN
 # img = cv.imread('fruits.jpg')
 # img2 = cv.imread('fruits2.jpg')
-img = cv.imread('croix_61.png')
-img2 = cv.imread('croix.png')
+img = cv.imread('croix_new.png')
+img2 = cv.imread('croix_new.png')
 #img = cv.imread('Rect.png')
 imgGray= cv.cvtColor(img2,cv.COLOR_BGR2GRAY)
 #imgGray2= cv.cvtColor(img2,cv.COLOR_BGR2GRAY)
@@ -215,21 +226,21 @@ elementStructurantAE = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
 elementStructurant = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 
 
-#imgSeuil = seuillage(120, imgGray)
+imgSeuil = seuillage(120, imgGray)
 
 #imgErodee = erosion(imgSeuil, elementStructurant)
 #
 # imgDilatee = dilatation(imgSeuil, elementStructurant)
 #
-# imgOuverture = ouverture(imgSeuil, elementStructurant)
+imgOuverture = ouverture(imgSeuil, elementStructurant)
 #
 # imgFermeture = fermeture(imgSeuil, elementStructurant)
 
 
-#imgAdd = addition(imgGray, imgGray2)
-#imgSous = soustraction(imgGray, imgGray2)
+#imgAdd = addition(imgOuverture, imgSeuil)
+imgSous = soustraction(imgSeuil,imgOuverture)
 
-#imgL = squeletisationLantuejoul(imgSeuil,elementStructurant,10)
+imgL = squeletisationLantuejoul(imgSeuil,elementStructurant,10)
 #imgL = epaississement(imgSeuil,elementStructurantAE)
 #imgL = amincissement(imgSeuil,elementStructurantAE)
 #imgL = squelettisationParAmincissement(imgSeuil, elementStructurantAE)
@@ -239,10 +250,10 @@ elementStructurant = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 # plt.subplot(1, 2, 1)
 # plt.title("Image d'origine")
 # plt.imshow(imgSeuil, cmap='gray')
-#
-# plt.subplot(3, 3, 2)
-# plt.title("Image seuillage")
-# plt.imshow(imgSeuil, cmap='gray', vmin=0, vmax=1)
+
+plt.subplot(3, 3, 2)
+plt.title("Image seuillage")
+plt.imshow(imgSeuil, cmap='gray', vmin=0, vmax=1)
 #
 # plt.subplot(3, 3, 3)
 # plt.title("Image érodée")
@@ -252,25 +263,25 @@ elementStructurant = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 # plt.title("Image dilatée")
 # plt.imshow(imgDilatee, cmap='gray', vmin=0, vmax=1)
 #
-# plt.subplot(3, 3, 5)
-# plt.title("Image ouverture")
-# plt.imshow(imgOuverture, cmap='gray', vmin=0, vmax=1)
+plt.subplot(3, 3, 5)
+plt.title("Image ouverture")
+plt.imshow(imgOuverture, cmap='gray', vmin=0, vmax=1)
 #
 # plt.subplot(3, 3, 6)
 # plt.title("Image fermeture")
 # plt.imshow(imgFermeture, cmap='gray', vmin=0, vmax=1)
 #
-# plt.subplot(3, 3, 7)
-# plt.title("Image addition")
-# plt.imshow(imgAdd,cmap='gray')
+#plt.subplot(3, 3, 6)
+#plt.title("Image addition")
+#plt.imshow(imgAdd,cmap='gray')
 #
-# plt.subplot(3, 3, 8)
-# plt.title("Image soustraction")
-# plt.imshow(imgSous,cmap='gray')
+plt.subplot(3, 3, 8)
+plt.title("Image soustraction")
+plt.imshow(imgSous,cmap='gray')
 
-# plt.subplot(1, 2, 2)
-# plt.title("Image Lantuejoul")
-# plt.imshow(imgL, cmap='gray')
+plt.subplot(1, 2, 2)
+plt.title("Image Lantuejoul")
+plt.imshow(imgL, cmap='gray')
 
 plt.show()
 
