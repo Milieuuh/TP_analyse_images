@@ -111,22 +111,27 @@ def fermeture(img, elementStructurant):
 
     return result
 
-def squeletisationLantuejoul(img,elementStructurant2,nbIteration):
+def squeletisationLantuejoul(img,elementStructurant2):
     print("Lantuejoul")
     imgAdd=img.copy()
 
-    for nb in range(0,nbIteration):
+    compteur = 0
+    while True:
+        imgAvant = imgAdd
         imgErode = img.copy()
-        for x in range(0, nb):
-            imgErode=erosion(imgErode, elementStructurant2)
+        for x in range(0, compteur):
+            imgErode = erosion(imgErode, elementStructurant2)
 
-        imgOuvertureErode=ouverture(imgErode, elementStructurant2)
-        imgSous=soustraction(imgErode, imgOuvertureErode)
+        imgOuvertureErode = ouverture(imgErode, elementStructurant2)
+        imgSous = soustraction(imgErode, imgOuvertureErode)
 
-        if nb>0:
-            imgAdd=addition(imgAdd, imgSous)
+        if compteur > 0:
+            imgAdd = addition(imgAdd, imgSous)
         else:
-            imgAdd=imgSous
+            imgAdd = imgSous
+        compteur = compteur +1
+        if differenceImage(imgAvant, imgAdd):
+            break
 
         # cv.namedWindow('img', cv.WINDOW_NORMAL)
         # cv.imshow('img', imgAdd)
@@ -135,10 +140,8 @@ def squeletisationLantuejoul(img,elementStructurant2,nbIteration):
 
     return imgAdd
 
-def amincissement(img, elementStructurant):
-    #print("ammincissement")
-    imgAmincie = img.copy()
-
+def voisinage(img, elementStructurant):
+    imgVoisinage = img.copy()
     # largeur et longueur de l'élément structurant
     widthElt = elementStructurant.shape[0]
     heightElt = elementStructurant.shape[1]
@@ -148,20 +151,41 @@ def amincissement(img, elementStructurant):
             bool = True
             for k in range(0 - widthElt // 2, widthElt - widthElt // 2):
                 for l in range(0 - heightElt // 2, heightElt - heightElt // 2):
-                    var = elementStructurant[k+1, l+1]
-                    if(var==1):
-                        var =255
-                    if img[i+k,j+l]!=var and elementStructurant[k+1,l+1]!=2:
-                       bool = False
+                    var = elementStructurant[k + widthElt // 2, l + heightElt // 2]
+                    if (var == 1):
+                        var = 255
+                    if img[i + k, j + l] != var and elementStructurant[k + 1, l + 1] != 2:
+                        bool = False
             if bool == False:
-                imgAmincie[i,j]=0
+                imgVoisinage[i, j] = 0
             else:
-                imgAmincie[i,j]=255
+                imgVoisinage[i, j] = 255
+
+    return imgVoisinage
+
+def amincissement(img):
+    #print("ammincissement")
+    imgAmincie = img.copy()
+
+    imgVoisinage1 = voisinage(img, np.array([[1, 1, 1], [2, 1, 2], [0, 0, 0]]))
+    imgVoisinage2 = voisinage(img, np.array([[0, 0, 0], [2, 1, 2], [1, 1, 1]]))
+    imgVoisinage3 = voisinage(img, np.array([[1, 2, 0], [1, 1, 0], [1, 2, 0]]))
+    imgVoisinage4 = voisinage(img, np.array([[0, 2, 1], [0, 1, 1], [0, 2, 1]]))
+
+
+    imgVoisinage = addition(imgVoisinage1, imgVoisinage2)
+    imgVoisinage = addition(imgVoisinage, imgVoisinage3)
+    imgVoisinage = addition(imgVoisinage, imgVoisinage4)
+
+    imgAmincie = soustraction(img, imgVoisinage)
 
     return imgAmincie
 
+
+
 def epaississement(img, elementStructurant):
     imgEpaississement = img.copy()
+    imgVoisin = img.copy()
 
     # largeur et longueur de l'élément structurant
     widthElt = elementStructurant.shape[0]
@@ -179,9 +203,10 @@ def epaississement(img, elementStructurant):
                     if img[i+k,j+l]==var and elementStructurant[k+1 ,l+1]!=2:
                        bool = False
             if bool == False:
-                imgEpaississement[i,j]=255
+                imgVoisin[i,j]=255
             else:
-                imgEpaississement[i,j]=0
+                imgVoisin[i,j]=0
+    imgEpaississement = addition(img, imgVoisin)
 
     return imgEpaississement
 
@@ -194,7 +219,7 @@ def differenceImage(img1, img2):
     return bool
 
 
-def squelettisationParAmincissement(img, elementStructurant):
+def squelettisationParAmincissement(img):
     print("Squeletisation par amincissement")
     imgSquelette = img.copy()
     nb=0
@@ -202,12 +227,12 @@ def squelettisationParAmincissement(img, elementStructurant):
 
         imgAvant = imgSquelette
         if nb==0:
-            imgSquelette = amincissement(img, elementStructurant)
+            imgSquelette = amincissement(img)
         else:
-            imgSquelette = amincissement(imgSquelette, elementStructurant)
+            imgSquelette = amincissement(imgSquelette)
         print(nb)
         nb=nb+1
-        if nb==10:#differenceImage(imgSquelette, imgAvant): #nb==30:
+        if differenceImage(imgSquelette, imgAvant): #nb==30:
             break
 
     return imgSquelette
@@ -222,7 +247,8 @@ img2 = cv.imread('croix_new.png')
 imgGray= cv.cvtColor(img2,cv.COLOR_BGR2GRAY)
 #imgGray2= cv.cvtColor(img2,cv.COLOR_BGR2GRAY)
 
-elementStructurantAE = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
+#elementStructurantAE = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
+elementStructurantAE = np.array([[1, 1, 1], [2, 1, 2], [0, 0, 0]])
 elementStructurant = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 
 
@@ -232,18 +258,18 @@ imgSeuil = seuillage(120, imgGray)
 #
 # imgDilatee = dilatation(imgSeuil, elementStructurant)
 #
-imgOuverture = ouverture(imgSeuil, elementStructurant)
+#imgOuverture = ouverture(imgSeuil, elementStructurant)
 #
 # imgFermeture = fermeture(imgSeuil, elementStructurant)
 
 
 #imgAdd = addition(imgOuverture, imgSeuil)
-imgSous = soustraction(imgSeuil,imgOuverture)
+#imgSous = soustraction(imgSeuil,imgOuverture)
 
-imgL = squeletisationLantuejoul(imgSeuil,elementStructurant,10)
+#imgL = squeletisationLantuejoul(imgSeuil,elementStructurant)
 #imgL = epaississement(imgSeuil,elementStructurantAE)
-#imgL = amincissement(imgSeuil,elementStructurantAE)
-#imgL = squelettisationParAmincissement(imgSeuil, elementStructurantAE)
+#imgL = amincissement(imgSeuil)
+#imgL = squelettisationParAmincissement(imgSeuil)
 
 
 #
@@ -263,9 +289,9 @@ plt.imshow(imgSeuil, cmap='gray', vmin=0, vmax=1)
 # plt.title("Image dilatée")
 # plt.imshow(imgDilatee, cmap='gray', vmin=0, vmax=1)
 #
-plt.subplot(3, 3, 5)
-plt.title("Image ouverture")
-plt.imshow(imgOuverture, cmap='gray', vmin=0, vmax=1)
+# plt.subplot(3, 3, 5)
+# plt.title("Image ouverture")
+# plt.imshow(imgOuverture, cmap='gray', vmin=0, vmax=1)
 #
 # plt.subplot(3, 3, 6)
 # plt.title("Image fermeture")
@@ -275,13 +301,13 @@ plt.imshow(imgOuverture, cmap='gray', vmin=0, vmax=1)
 #plt.title("Image addition")
 #plt.imshow(imgAdd,cmap='gray')
 #
-plt.subplot(3, 3, 8)
-plt.title("Image soustraction")
-plt.imshow(imgSous,cmap='gray')
+# plt.subplot(3, 3, 8)
+# plt.title("Image soustraction")
+# plt.imshow(imgSous,cmap='gray')
 
-plt.subplot(1, 2, 2)
-plt.title("Image Lantuejoul")
-plt.imshow(imgL, cmap='gray')
-
-plt.show()
+# plt.subplot(1, 2, 2)
+# plt.title("Image Lantuejoul")
+# plt.imshow(imgL, cmap='gray')
+#
+# plt.show()
 
