@@ -1,5 +1,6 @@
 import tkinter
 from tkinter.filedialog import *
+from tkinter.filedialog import askopenfilename
 import main
 import cv2 as cv
 from PIL import Image, ImageTk
@@ -122,8 +123,6 @@ def soustraction(lablResult, path1, path2):
 
 def amincissement(lablResult, path1):
     elementStructurant = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
-    #elementStructurant = np.array([[0, 0, 0], [0, 1, 0], [0, 2, 2]])
-    #elementStructurant = np.array([[0, 0, 0], [2, 1, 2], [1, 1, 1]])
 
     img = cv.imread(path1)
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -138,8 +137,6 @@ def amincissement(lablResult, path1):
 
 def epaississement(lablResult, path1):
     elementStructurant = np.array([[1, 2, 1], [1, 1, 2], [2, 1, 2]])
-    #elementStructurant = np.array([[0, 0, 0], [0, 1, 0], [0, 2, 2]])
-    #elementStructurant = np.array([[0, 0, 0], [2, 1, 2], [1, 1, 1]])
 
     img = cv.imread(path1)
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -154,7 +151,7 @@ def epaississement(lablResult, path1):
 
 def squelettisation(lablResult, path1, nb):
     elementStructurant = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
-    
+
     img = cv.imread(path1)
     imgGray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     imgSeuil = main.seuillage(120, imgGray)
@@ -230,6 +227,7 @@ def charge(labl):
 def charge2(labl):
     filepathCharge = askopenfilename(initialdir="/", title="Open as", defaultextension="*.*",
                                      filetypes=(("JPG files", "*.jpg"),("PNG files", "*.png"), ("all files", "*.*")))
+    print("COUCOU MERDE §§§§",filepathCharge)
     image = Image.open(filepathCharge).resize((300, 300))
     global path2
     path2 = filepathCharge
